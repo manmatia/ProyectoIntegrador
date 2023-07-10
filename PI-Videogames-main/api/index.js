@@ -23,9 +23,10 @@ const { conn } = require('./src/db.js');
 
 
 // Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false  }).then(() => {
   server.listen(3001, () => {
-    conn.sync({ force:false }),
     console.log('server 3001 online'); // eslint-disable-line no-console
   });
+}).catch((error) => {
+  console.error('Error al sincronizar la base de datos:', error);
 });

@@ -10,7 +10,7 @@ const mainRouter = Router();
 mainRouter.use("/videogames", videogamesRouter)
 mainRouter.use("/genres", generosRouter);
 mainRouter.use("/videogames", postRouter)
-  
+
   
 
   

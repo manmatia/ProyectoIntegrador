@@ -6,12 +6,12 @@ const videogamesRouter= Router()
 
 
 // routes /videogames
-
-videogamesRouter.get("/", getVideogameHandler)
+// videogamesRouter.get("/", getVideogameHandler)
+videogamesRouter.get("/",getNameHandler)
 
 videogamesRouter.get(`/:id`, getIdGamesHandler )
 
-videogamesRouter.get("/",getNameHandler)
+
     
      
     

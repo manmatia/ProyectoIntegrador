@@ -1,43 +1,95 @@
 const axios= require('axios');
 const {Videogame }=require("../db");
 const apiclean = require('../utils/cleanApi');
-const { API_KEY} = process.env;
+const { API_KEY, API_KEY2} = process.env;
+const { Op } = require("sequelize");
 const createPostDB=async (Nombre,Descripcion, Imagen)=>{
-
-    
 return await Videogame.create({Nombre,Descripcion, Imagen})
-
 }
 
+const getVideogameBiId = async (id, source) => {
+  let videogame;
 
-const getVideogameBiId= async (id, source)=>{
-const videogame=source==="api"?(await axios.get(`https://api.rawg.io/api/games/${id}${API_KEY}`)).data:
- apiclean(Videogame.findByPk(id))
+  if (source === "api") {
+    videogame = (await axios.get(`https://api.rawg.io/api/games/${id}${API_KEY}`)).data;
+    videogame = apiclean([videogame])[0];
+  } else {
 
-return videogame
-}
+  videogame = await Videogame.findByPk(id);}
+  return videogame;
+};
 
-const getAllVideogames= async()=>{
-  const videogamesBD=await Videogame.findAll()
-  
-  
-  const videogamesApi=(await axios.get(`https://api.rawg.io/api/games${API_KEY}`)).data
+const getAllVideogamesNombre = async (name) => {
+  const videogamesBD = await Videogame.findAll({
+    where: {
+      Nombre: {
+        [Op.iLike]: `%${name}%`,
+      },
+    },
+  });
+  const apiCleanVideogames = [];
 
-const apiCleanVideogames= apiclean(videogamesApi)
-  return [...videogamesBD, ...apiCleanVideogames]
-}
+  let page = 1;
+  let count = 0;
 
-const getVideogameByNombre =async(name)=>{
-  const videogamesApi=(await axios.get(`https://api.rawg.io/api/games?search=${name}${API_KEY}`)).data
+  while (count < 15) {
+    const response = await axios.get(
+      `https://api.rawg.io/api/games?search=${name}${API_KEY2}`
+    );
+    const games = response.data.results;
+    const cleanGames = apiclean(games);
 
-  const apiCleanVideogames= apiclean(videogamesApi)
-const videogameFiltered= apiCleanVideogames.filter(videogame=>videogame.name===name)
-const videogamesDB= await Videogame.findAll({where: {name:name}})
+    if (cleanGames.length > 0) {
+      apiCleanVideogames.push(...cleanGames);
+      count += cleanGames.length;
+    } else {
+      break; // Si no hay más resultados, salimos del bucle
+    }
 
-return [...videogamesDB,...videogameFiltered]
+    page++;
+  }
 
-}
+  return [...videogamesBD, ...apiCleanVideogames.slice(0, 15)];
+};
+const getAllVideogames = async () => {
+  const videogamesBD = await Videogame.findAll();
 
+  // Realizar múltiples solicitudes a la API para obtener los juegos en varias páginas
+  const apiCleanVideogames = [];
+  let page = 1;
 
-module.exports = {createPostDB, getVideogameBiId, getAllVideogames, getVideogameByNombre}
+  while (apiCleanVideogames.length < 100) {
+    const response = await axios.get(`https://api.rawg.io/api/games${API_KEY}&page=${page}`);
+    const games = response.data.results;
+    const cleanGames = apiclean(games);
+    apiCleanVideogames.push(...cleanGames);
+    page++;
+  }
 
+  return [...videogamesBD, ...apiCleanVideogames.slice(0, 100)];
+};
+
+const getVideogameByNombre = async (name) => {
+  const allVideogames = [];
+  const request = [];
+  for (let i = 1; i < 6; i++) {
+    if (i === 1) {
+      request.push(axios.get(`https://api.rawg.io/api/games?search=${name}${API_KEY}`));
+    }
+    request.push(axios.get(`https://api.rawg.io/api/games?search=${name}&page=${i}${API_KEY}`));
+  }
+  const response = await axios.all(request);
+  response.filter((response) => {
+    allVideogames.push(...response.data.results);
+  });
+
+  const apiCleanVideogames = apiclean(allVideogames);
+//filtra coincidencias 
+  const videogameFiltered = apiCleanVideogames.filter((videogame) =>
+    videogame.Nombre.toLowerCase().includes(name.toLowerCase())
+  );
+
+  return videogameFiltered;
+};
+
+module.exports = { createPostDB, getVideogameBiId, getAllVideogames, getVideogameByNombre, getAllVideogamesNombre };

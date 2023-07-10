@@ -1,10 +1,10 @@
 const {Router} = require('express');
 const generosRouter = Router();
-const {getGenreHandler}=require("../handlers/gamesHandler")
+const { genreHandler } = require('../handlers/genrehandler');
 
 
 
-generosRouter.get("/genres", getGenreHandler)
+generosRouter.get("/", genreHandler)
 
  
 
