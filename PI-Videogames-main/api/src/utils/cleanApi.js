@@ -6,12 +6,13 @@ const apiclean = (arr) => {
         Descripcion: e.description_raw,
         Plataforma: e.parent_platforms?.map((platforms)=>{
             return platforms.platform.name
-        }),
+        }).join(" - "),
         Rating: e.rating,
         Imagen: e.background_image,
        Genero:  e.genres?.map((genre)=>{
         return genre.name
-    }),
+    }).join(" - "),
+    Lanzamiento: e.released
       };
     });
   };

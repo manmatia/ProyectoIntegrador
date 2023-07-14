@@ -1,18 +1,23 @@
 .card-conteiner{
     display: flex;
     flex-direction: column;
-    background-color: aquamarine;
-    border: 1px solid gray;
+    background: linear-gradient(
+        to left, rgb(235, 239, 5) 0%, 
+        rgb(87, 56, 211) 100%
+    );  
+    border: 2px solid rgb(8, 0, 0);
     border-radius: 5px;
     padding: 25px;
     cursor: pointer;
     -moz-osx-font-smoothing: grayscale;
     backface-visibility: hidden;
     transform: translateZ(0);
-    transition: transform 0,25s ease-out;
+    transition: transform 0.5s ease-out, background-color 0.5s ease-out, box-shadow 0.5s ease-out;
 }
-.card-conteine:hover {
-transform: scale(1,5);
+.card-conteiner:hover {
+    transform: scale(1.1);
+    background-color: lightblue; /* Cambia el color de fondo al pasar el mouse */
+    box-shadow: 0 0 10px rgba(120, 1, 1, 0.2);
 }
 .card-image {
     max-width: 100%;

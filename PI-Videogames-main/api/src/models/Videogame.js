@@ -8,13 +8,14 @@ module.exports = (sequelize) => {
     Nombre: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique:true,
     },
-    Id:{
+    id:{
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
+      
       
     },
     Descripcion: {
@@ -31,11 +32,12 @@ module.exports = (sequelize) => {
  allowNull: false,
     },
     Fecha_de_lanzamiento:{
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       
     },
     Rating:{
-      type:DataTypes.STRING, 
+      type:DataTypes.DECIMAL(3,2), 
+      defaultValue: 0,
     },
     created:{ //! created true viene de la base datos, el false de la api 
       type: DataTypes.BOOLEAN,

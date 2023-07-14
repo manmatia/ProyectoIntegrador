@@ -3,8 +3,11 @@ const {Videogame }=require("../db");
 const apiclean = require('../utils/cleanApi');
 const { API_KEY, API_KEY2} = process.env;
 const { Op } = require("sequelize");
-const createPostDB=async (Nombre,Descripcion, Imagen)=>{
-return await Videogame.create({Nombre,Descripcion, Imagen})
+
+
+
+const createPostDB=async (Nombre,Descripcion, Imagen, Lanzamiento,Rating, Plataforma, Genero)=>{
+return await Videogame.create({Nombre,Descripcion, Imagen, Lanzamiento,Rating, Plataforma, Genero})
 }
 
 const getVideogameBiId = async (id, source) => {
@@ -27,30 +30,45 @@ const getAllVideogamesNombre = async (name) => {
       },
     },
   });
-  const apiCleanVideogames = [];
+  
+  const response = await axios.get(`https://api.rawg.io/api/games?search=${name}${API_KEY2}`);
+  const games = response.data.results;
+  const cleanGames = apiclean(games);
 
-  let page = 1;
-  let count = 0;
-
-  while (count < 15) {
-    const response = await axios.get(
-      `https://api.rawg.io/api/games?search=${name}${API_KEY2}`
-    );
-    const games = response.data.results;
-    const cleanGames = apiclean(games);
-
-    if (cleanGames.length > 0) {
-      apiCleanVideogames.push(...cleanGames);
-      count += cleanGames.length;
-    } else {
-      break; // Si no hay más resultados, salimos del bucle
-    }
-
-    page++;
-  }
-
-  return [...videogamesBD, ...apiCleanVideogames.slice(0, 15)];
+  return [...videogamesBD, ...cleanGames].slice(0, 15);
 };
+// const getAllVideogamesNombre = async (name) => {
+//   const videogamesBD = await Videogame.findAll({
+//     where: {
+//       Nombre: {
+//         [Op.iLike]: `%${name}%`,
+//       },
+//     },
+//   });
+//   const apiCleanVideogames = [];
+
+//   let page = 1;
+//   let count = 0;
+
+//   while (count < 15) {
+//     const response = await axios.get(
+//       `https://api.rawg.io/api/games?search=${name}${API_KEY2}`
+//     );
+//     const games = response.data.results;
+//     const cleanGames = apiclean(games);
+
+//     if (cleanGames.length > 0) {
+//       apiCleanVideogames.push(...cleanGames);
+//       count += cleanGames.length;
+//     } else {
+//       break; // Si no hay más resultados, salimos del bucle
+//     }
+
+//     page++;
+//   }
+
+//   return [...videogamesBD, ...apiCleanVideogames.slice(0, 15)];
+// };
 const getAllVideogames = async () => {
   const videogamesBD = await Videogame.findAll();
 

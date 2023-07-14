@@ -5,7 +5,7 @@ const apicleanGenre = (arr) => {
         Nombre: e.name,
         Juegos: e.games?.map((juego)=>{
             return juego.name
-        }),
+        }).join("-"),
        
         Imagen: e.image_background,
     

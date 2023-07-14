@@ -6,7 +6,7 @@ function Cards({allGames}) {
   return (
     <div className='card-list'>
 {gameList?.map((games) =>
-<Card games={games}/>)}
+<Card games={games} key={games.id} />)}
     </div>
   )
 }
