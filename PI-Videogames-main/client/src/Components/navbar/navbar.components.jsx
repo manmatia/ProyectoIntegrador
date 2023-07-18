@@ -7,14 +7,7 @@ const history=useHistory()
 const createRoute=()=>{history.push("/create")}
 
   return (
-    // <div className='search'>
-    //   <button className='neon-button' onClick={createRoute}>Crear VideoGame</button>
-    //   <form onChange={handleChange}>
-        
-    //     <input className="neon-input" placeholder="Busqueda"  type="text" />
-    //     <button className="neon-button" type="submit" onClick={handleSubmit} >Buscar</button>
-    //   </form>
-    //    </div>
+  
     
     <div className="container">
       <div className="search">

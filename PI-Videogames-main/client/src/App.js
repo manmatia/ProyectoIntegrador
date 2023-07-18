@@ -15,7 +15,6 @@ function App() {
       <Route exact path="/home" component={Home} />
       <Route exact path="/home/:id" component={Detail} />
       <Route exact path="/create" component={Create} />
-      <Route exact path="/landing" component={Landing} />
       <Route exact path="*" component={Home} />
       </Switch>
     </div>

@@ -12,12 +12,12 @@ function Landing() {
       <br />
       <hr />
       <hr />
-      <h1> Bienvenidos a la pagina de  </h1> 
-      <h2>💥VIDEOGAMES💥</h2>
+      <h1 className='neon-text'> Bienvenidos a la pagina de  </h1> 
+      <h2 className='neon-text'>💥VIDEOGAMES💥</h2>
       <hr /><hr />
       <br />
     <h3> click aqui para ingresar a la pagina </h3>
-    <button onClick={botonclick}>INGRESAR</button>
+    <button className='neon-button' onClick={botonclick}>INGRESAR</button>
     
     </div>
   )

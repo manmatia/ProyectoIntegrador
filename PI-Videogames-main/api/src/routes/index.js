@@ -3,7 +3,7 @@ const { Router } = require('express');
 // Ejemplo: const authRouter = require('./auth.js');
 const axios=require("axios");
 const Videogame = require('../models/Videogame');
-const Genre = require('../models/genre');
+
 const {API_KEY}=process.env
 const router = Router();
 

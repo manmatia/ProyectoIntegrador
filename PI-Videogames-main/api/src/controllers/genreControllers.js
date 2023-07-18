@@ -4,21 +4,50 @@ const {API_KEY} = process.env
 
 const apicleanGenre = require("../utils/cleanGenre");
 
-const genreControllers= async(genre)=>{
-    let genreApi= (await axios.get(`https://api.rawg.io/api/genres${API_KEY}`)).data
-    genreApi.map((genre)=>{
-        Genre.findOrCreate({where:{name: genre.name}})
-    })
-    let genres=await Genre.findAll()
-    return genres
+
+
+
+const genreControllers = async () => {
+  try {
+    let genreApi = (await axios.get(`https://api.rawg.io/api/genres${API_KEY}`)).data.results;
+
+    const gameGenres = apicleanGenre(genreApi);
+    return gameGenres;
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    throw new Error('Error al obtener los géneros');
+  }
+
 }
 
+
+
+//
 const getAllGenre = async () => {
-    const genreBD = await Genre.findAll();
-    const genreApi = (await axios.get(`https://api.rawg.io/api/genres${API_KEY}`)).data.results;
-    const apiCleanVideogames = apicleanGenre(genreApi);
+  try {
+    let genreBD = false;
+    if (genreBD === false) {
+      const allGenres = await genreControllers();
+      genreBD = true;
+      const setGenresDB = allGenres.map(async (item) => {
+        await Genre.findOrCreate({ where: { Nombre: item } });
+      });
+      await Promise.all(setGenresDB);
+    }
+
+    const allGenresFromDB = await Genre.findAll();
+    return allGenresFromDB;
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    throw new Error('Error al obtener todos los géneros');
+  }
+};
+ 
+
+
+
   
-    return [...genreBD, ...apiCleanVideogames];
-  };
 
 module.exports={genreControllers,getAllGenre}

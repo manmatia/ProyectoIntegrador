@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useSelector } from 'react-redux'
 import { useParams, useHistory} from 'react-router-dom'
 import { getById } from '../../redux/actions'
@@ -11,15 +11,21 @@ function Detail() {
   console.log(id)
   const dispatch = useDispatch();
   const videogameId = useSelector((state) => state.gameById);
- 
+  const [loadedGame, setLoadedGame] = useState(null);
+
 const history = useHistory()
 const volverHome=() => {
-  history.push("/home")
+  history.push('/home')
 }
 useEffect(() => {
    dispatch(getById(id))
   
 }, [dispatch, id])
+useEffect(() => {
+  return () => {
+    setLoadedGame(null); // Limpiar el detalle del juego al salir de la página
+  };
+}, []);
 
 
   return (

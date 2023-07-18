@@ -9,9 +9,7 @@ const apiclean = (arr) => {
         }).join(" - "),
         Rating: e.rating,
         Imagen: e.background_image,
-       Genero:  e.genres?.map((genre)=>{
-        return genre.name
-    }).join(" - "),
+       Genero:  e.genres?.map((genre)=> genre.name),
     Lanzamiento: e.released
       };
     });
