@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
 import { useSelector } from 'react-redux'
-import { useParams, useHistory} from 'react-router-dom'
-import { getById } from '../../redux/actions'
+import { useParams} from 'react-router-dom'
+import { clearGameDetail, getById } from '../../redux/actions'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import "./detail.styles.css"
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 function Detail() {
   const { id } = useParams();
@@ -13,13 +14,13 @@ function Detail() {
   const videogameId = useSelector((state) => state.gameById);
   const [loadedGame, setLoadedGame] = useState(null);
 
-const history = useHistory()
-const volverHome=() => {
-  history.push('/home')
-}
+
 useEffect(() => {
    dispatch(getById(id))
-  
+   return () => {
+    dispatch(clearGameDetail());
+  };
+
 }, [dispatch, id])
 useEffect(() => {
   return () => {
@@ -27,28 +28,38 @@ useEffect(() => {
   };
 }, []);
 
+const {
+  Nombre,
+  Plataforma,
+  Lanzamiento,
+  Rating,
+  Genero,
+  Imagen,
+  Descripcion,
+  
+} =videogameId ;
 
   return (
     <div>
       {videogameId ? (
         <div>
-          <header>
-            <button  className='neon-button' onClick={volverHome}>INICIO</button>
-          </header>
-          <h1 className='neon-text'>NOMBRE: {videogameId.Nombre}</h1>
-          <h2>ID: {videogameId.id}</h2>
+          <Link to="/home">
+            <button  className='neon-button' >INICIO</button>
+          </Link>
+          <h1 className='neon-text'>NOMBRE: {Nombre}</h1>
+          <h2>ID: {id}</h2>
           <hr /><hr />
-          <img className='imagen' src={videogameId.Imagen} alt={videogameId.Nombre} />
+          <img className='imagen' src={Imagen} alt={Nombre} />
          <br /> <br /> <span>Descripción: </span>
-          <span>{videogameId.Descripcion}</span><br /><br />
+          <span>{Descripcion}</span><br /><br />
           <span>Plataformas: </span>
-          <span>{videogameId.Plataforma}</span><br /><br />
+          <span>{Plataforma}</span><br /><br />
           <span>Generos: </span>
-          <span>{videogameId.Genero}</span><br /><br />
+          <span>{Genero}</span><br /><br />
           <span>Rating:</span>
-          <span>{videogameId.Rating}</span><br /><br />
+          <span>{Rating}</span><br /><br />
           <span>Lanzamiento:</span>
-          <span>{videogameId.Lanzamiento}</span>
+          <span>{Lanzamiento}</span>
         </div>
       ) : (
         <p>No se encontro id </p>

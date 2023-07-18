@@ -10,18 +10,19 @@ export const FILTER = "FILTER";
 export const ERROR = "ERROR";
 export const RESET_FILTERS = "RESET_FILTERS";
 export const FILTER_API_BD = "FILTER_API_BD";
-
+export const CLEAR_GAME_DETAIL = "CLEAR_GAME_DETAIL"
+export const ORDER_RATING = "ORDER_RATING"
 
 export function getGames() {
   return async function (dispatch) {
     try {
       const response = await axios.get("http://localhost:3001/videogames/");
-      return dispatch({
+      dispatch({
         type: GET_GAMES,
         payload: response.data,
       });
     } catch (error) {
-      return dispatch({
+     dispatch({
         type: ERROR,
         payload: {
           message: error.response.data.message,
@@ -31,23 +32,21 @@ export function getGames() {
   };
 }
 
+
 export function getByName(name) {
   return async function (dispatch) {
     try {
       const response = await axios.get(
         `http://localhost:3001/videogames/?name=${name}`
       );
-      return dispatch({
+      dispatch({
         type: GET_BY_NAME,
         payload: response.data,
       });
+      return response.data; // Devolver el resultado de la respuesta
     } catch (error) {
-      return dispatch({
-        type: ERROR,
-        payload: {
-          message: error.response.data.message,
-        },
-      });
+      alert("Juego no encontrado");
+      console.error("Error al obtener el juego por nombre:", error);
     }
   };
 }
@@ -70,10 +69,22 @@ export function getById(id) {
     }
   };
 }
+export function clearGameDetail() {
+  return {
+    type: CLEAR_GAME_DETAIL,
+  };
+}
 
 export function orderGames(order) {
   return {
     type: ORDER,
+    payload: order,
+  };
+}
+
+export function orderRating(order) {
+  return {
+    type: ORDER_RATING,
     payload: order,
   };
 }

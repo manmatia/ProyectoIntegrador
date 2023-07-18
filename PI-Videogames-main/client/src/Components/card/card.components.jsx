@@ -9,7 +9,7 @@ function Card({games}) {
       <Link to={`/home/${id}`}>
       
      <h2>{Nombre}</h2>
-    <p>-{Genero}-</p>
+    <p>-{Genero.join(" - ")}-</p>
 
     <img src={Imagen}className="card-image" alt={Nombre} />
       </Link>

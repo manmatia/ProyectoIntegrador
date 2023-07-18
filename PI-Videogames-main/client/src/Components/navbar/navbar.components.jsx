@@ -11,10 +11,10 @@ const createRoute=()=>{history.push("/create")}
     
     <div className="container">
       <div className="search">
-        <form onChange={handleChange}>
+        <form onSubmit={handleSubmit}>
           <div className="search-container">
-            <input className="neon-input" placeholder="Busqueda" type="text" />
-            <button  type="submit" onClick={handleSubmit}>
+            <input className="neon-input" placeholder="Busqueda" type="text" onChange={handleChange} />
+            <button  type="submit"  >
               Buscar
             </button>
           </div>

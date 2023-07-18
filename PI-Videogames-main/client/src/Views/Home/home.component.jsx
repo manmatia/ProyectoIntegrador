@@ -21,7 +21,7 @@ export default function Home() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const result = await dispatch(getByName(searchstring));
+      const result =await dispatch(getByName(searchstring));
       console.log(result);
       setCurrentPage(1); // Reiniciar la página a 1 después de buscar
     } catch (error) {
@@ -31,15 +31,18 @@ export default function Home() {
 
   useEffect(() => {
     // Cargar los juegos inicialmente
+    // !(allGames.length) && dispatch(getGames());
     dispatch(getGames());
   }, [dispatch]);
 
+
+
   let filteredGames = [];
-  if (searchstring) {
-    filteredGames = videogamesId instanceof Array ? videogamesId : [];
-  } else {
-    filteredGames = allGames instanceof Array ? allGames : [];
-  }
+if (searchstring) {
+  filteredGames = allGames.filter(game => game.Nombre.toLowerCase().includes(searchstring.toLowerCase()));
+} else {
+  filteredGames = allGames instanceof Array ? allGames : [];
+}
 
   const indexOfLastGame = currentPage * gamesPerPage;
   const indexOfFirstGame = indexOfLastGame - gamesPerPage;
@@ -95,3 +98,4 @@ export default function Home() {
     </div>
   );
 }
+

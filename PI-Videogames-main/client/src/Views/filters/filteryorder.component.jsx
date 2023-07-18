@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { filterApiBd, filterGame, orderGames, resetFilters } from '../../redux/actions';
+import { filterApiBd, filterGame, orderGames, orderRating, resetFilters } from '../../redux/actions';
 import "./filteryorder.styles.css";
 
 function Filteryorder() {
@@ -9,10 +9,18 @@ function Filteryorder() {
  const [filterGenre, setFilterGenre] = useState('Genero');
  const [filterApiBdt, setFilterApiBdt] = useState('Api-Creados');
  const [filterSort, setFilterSort] = useState('Ordenamiento');
+const [filterSortRating, setFilterSortRating]=useState("Rating")
 
  function handleSort(e){
   setFilterSort(e.target.value);
   dispatch(orderGames(e.target.value));
+
+}
+
+function handleSortRating(e){
+  setFilterSortRating(e.target.value);
+  dispatch(orderRating(e.target.value));
+  
 }
 
 const handleApiBD = (e) => {
@@ -29,6 +37,7 @@ const handleResetFilters = () => {
   setFilterGenre('Genero'); // Establecer el valor por defecto al hacer clic en Reset Filters
   setFilterApiBdt('Api-Creados'); // Establecer el valor por defecto al hacer clic en Reset Filters
   setFilterSort('Ordenamiento'); // Establecer el valor por defecto al hacer clic en Reset Filters
+  setFilterSortRating("Rating")
   dispatch(resetFilters());
 };
 
@@ -50,6 +59,13 @@ const handleResetFilters = () => {
       <select placeholder='order' onChange={handleSort} value={filterSort}>
         <option value="Ordenamiento">Ordenamiento</option>
         {["az","za"].map((genre) => (
+          <option value={genre}>{genre}</option>
+        ))}
+      </select>
+      <br />
+      <select placeholder='orderRating' onChange={handleSortRating} value={filterSortRating}>
+        <option value="Rating">Rating</option>
+        {["1 A 5","5 A 1"].map((genre) => (
           <option value={genre}>{genre}</option>
         ))}
       </select>

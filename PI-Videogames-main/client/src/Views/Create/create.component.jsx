@@ -1,12 +1,13 @@
-import { useHistory } from "react-router-dom";
+
 import { useDispatch, useSelector } from "react-redux";
 import { createGame, getGenre } from "../../redux/actions";
 import React, { useState, useEffect } from "react";
 import "./create.styles.css";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const Create = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
+ 
 
   const [input, setInput] = useState({
     Nombre: "",
@@ -36,9 +37,7 @@ const Create = () => {
 
   }, [dispatch]);
 
-  const botonHome = () => {
-    history.push("/home");
-  };
+
 
   const validateField = (name, value) => {
     let error = "";
@@ -146,9 +145,12 @@ const Create = () => {
 
   return (
     <div>
-      <button className="neon-button" onClick={botonHome}>
+      <Link to="/home">
+      <button className="neon-button" >
         INICIO
       </button>
+      
+      </Link>
       <form>
         <div>
           <br />
